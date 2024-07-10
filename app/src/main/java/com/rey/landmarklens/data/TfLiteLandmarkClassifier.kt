@@ -55,6 +55,15 @@ class TfLiteLandmarkClassifier(
             .build()
 
         val results = classifier?.classify(tensorImage, imageProcessingOptions)
+
+        return results?.flatMap { classifications ->
+            classifications.categories.map { category ->
+                Classification(
+                    name = category.displayName,
+                    score = category.score
+                )
+            }
+        }?.distinctBy { it.name } ?: emptyList()
     }
 
     private fun getOrientationFromRotation(rotation: Int): ImageProcessingOptions.Orientation {
