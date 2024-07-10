@@ -84,7 +84,7 @@ dependencies {
     implementation(libs.androidx.camera.extensions)
 
     // Tensorflow Lite dependencies
-    implementation (libs.tensorflow.lite.task.vision.play.services)
-    implementation (libs.play.services.tflite.gpu)
-    implementation (libs.tensorflow.lite.gpu.delegate.plugin)
+    implementation(libs.tensorflow.lite.task.vision)
+    implementation(libs.tensorflow.lite.gpu.delegate.plugin.v040)
+    implementation(libs.tensorflow.lite.gpu)
 }
