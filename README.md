@@ -8,7 +8,7 @@ App that recognizes landmarks using Camera.
 
 - Jetpack Compose
 - [CameraX](https://developer.android.com/media/camera/camerax) 
-- MVVM Archetecture
+- MVVM architecture
 - [TensorFlow Model](https://www.kaggle.com/models/google/landmarks)  
 
 
