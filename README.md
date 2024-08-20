@@ -1,4 +1,4 @@
-
+[![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 # Landmark-Lens
 
 App that recognizes landmarks using Camera.
