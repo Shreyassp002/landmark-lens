@@ -9,11 +9,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,6 +27,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,7 +45,7 @@ import com.rey.landmarklens.ui.theme.LandmarkLensTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!hasCameraPermission()){
+        if (!hasCameraPermission()) {
             ActivityCompat.requestPermissions(
                 this, arrayOf(Manifest.permission.CAMERA), 0
             )
@@ -48,7 +53,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             LandmarkLensTheme {
-
                 var classifications by remember {
                     mutableStateOf(emptyList<Classification>())
                 }
@@ -77,26 +81,28 @@ class MainActivity : ComponentActivity() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                ){
-                    CameraPreview(controller, modifier = Modifier.fillMaxSize())
-
+                        .background(MaterialTheme.colorScheme.background)
+                ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.TopCenter)
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        classifications.forEach{
-                            Text(
-                                text = "${it.name} : ${it.score}",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(MaterialTheme.colorScheme.primaryContainer)
-                                    .padding(8.dp),
-                                textAlign = TextAlign.Center,
-                                fontSize = 20.sp,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
+                        // Camera preview section
+                        CameraPreview(controller, modifier = Modifier.weight(1f))
+
+                        // Bottom sheet for classifications
+                        ClassificationList(
+                            classifications = classifications,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                                .shadow(8.dp, MaterialTheme.shapes.large)
+                                .background(
+                                    color = MaterialTheme.colorScheme.surface,
+                                    shape = MaterialTheme.shapes.large
+                                )
+                                .clip(MaterialTheme.shapes.large)
+                                .padding(16.dp)
+                        )
                     }
                 }
             }
@@ -105,6 +111,36 @@ class MainActivity : ComponentActivity() {
 
     private fun hasCameraPermission() = ContextCompat.checkSelfPermission(
         this, Manifest.permission.CAMERA
-    )== PackageManager.PERMISSION_GRANTED
+    ) == PackageManager.PERMISSION_GRANTED
 }
+
+@Composable
+fun ClassificationList(
+    classifications: List<Classification>,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp) // Modern spacing between items
+    ) {
+        // Display each classification inside a card
+        classifications.forEach { classification ->
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                elevation = CardDefaults.cardElevation(8.dp) // Add subtle elevation for modern look
+            ) {
+                Text(
+                    text = "${classification.name} : ${classification.score}",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp), // Modern padding for the card content
+                    style = MaterialTheme.typography.bodyLarge, // Use modern typography
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer // Modern contrast color
+                )
+            }
+        }
+    }
+}
+
 
